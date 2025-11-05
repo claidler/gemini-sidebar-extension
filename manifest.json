@@ -10,14 +10,6 @@
     "tabs"
   ],
   "host_permissions": ["https://gemini.google.com/*"],
-  "content_scripts": [
-    {
-      "matches": ["https://gemini.google.com/*"],
-      "js": ["content-script.js"],
-      "run_at": "document_idle",
-      "all_frames": true
-    }
-  ],
   "side_panel": {
     "default_path": "sidepanel.html"
   },
