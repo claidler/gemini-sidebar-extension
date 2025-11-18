@@ -12,11 +12,40 @@
         {
           "header": "content-security-policy",
           "operation": "remove"
+        },
+        {
+          "header": "permissions-policy",
+          "operation": "remove"
+        },
+        {
+          "header": "feature-policy",
+          "operation": "remove"
         }
       ]
     },
     "condition": {
       "urlFilter": "||gemini.google.com",
+      "resourceTypes": ["sub_frame", "main_frame"]
+    }
+  },
+  {
+    "id": 2,
+    "priority": 2,
+    "action": {
+      "type": "modifyHeaders",
+      "responseHeaders": [
+        {
+          "header": "permissions-policy",
+          "operation": "remove"
+        },
+        {
+          "header": "feature-policy",
+          "operation": "remove"
+        }
+      ]
+    },
+    "condition": {
+      "urlFilter": "||accounts.google.com",
       "resourceTypes": ["sub_frame", "main_frame"]
     }
   }

@@ -56,3 +56,60 @@ chrome.commands.onCommand.addListener(async (command, tab) => {
     console.error(error);
   }
 });
+
+// Handle clipboard operations for the extension
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+  if (request.action === "copyToClipboard") {
+    console.log("Background: Copy to clipboard request received");
+
+    if (request.text) {
+      // Use the clipboard API
+      navigator.clipboard
+        .writeText(request.text)
+        .then(() => {
+          console.log("Background: Text copied to clipboard successfully");
+          sendResponse({ success: true });
+        })
+        .catch((err) => {
+          console.error("Background: Failed to copy text:", err);
+          sendResponse({ success: false, error: err.message });
+        });
+
+      return true; // Keep the message channel open for async response
+    }
+  }
+});
+
+// Monitor for copy operations in the side panel
+chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
+  if (
+    changeInfo.status === "complete" &&
+    tab.url &&
+    tab.url.includes("gemini.google.com")
+  ) {
+    console.log("Background: Gemini tab updated, injecting clipboard helper");
+
+    // Inject clipboard helper script
+    chrome.scripting
+      .executeScript({
+        target: { tabId: tabId },
+        func: () => {
+          // Clipboard helper function
+          window.geminiSidebarCopyHelper = function (text) {
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+              return navigator.clipboard.writeText(text);
+            } else {
+              throw new Error("Clipboard API not available");
+            }
+          };
+
+          console.log(
+            "Gemini Sidebar: Clipboard helper injected via background script"
+          );
+        },
+      })
+      .catch((err) => {
+        console.error("Background: Failed to inject clipboard helper:", err);
+      });
+  }
+});
