@@ -7,10 +7,7 @@
     "sidePanel",
     "declarativeNetRequest",
     "declarativeNetRequestWithHostAccess",
-    "tabs",
-    "clipboardRead",
-    "clipboardWrite",
-    "scripting"
+    "clipboardWrite"
   ],
   "host_permissions": ["https://gemini.google.com/*"],
   "side_panel": {

@@ -80,36 +80,4 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   }
 });
 
-// Monitor for copy operations in the side panel
-chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
-  if (
-    changeInfo.status === "complete" &&
-    tab.url &&
-    tab.url.includes("gemini.google.com")
-  ) {
-    console.log("Background: Gemini tab updated, injecting clipboard helper");
 
-    // Inject clipboard helper script
-    chrome.scripting
-      .executeScript({
-        target: { tabId: tabId },
-        func: () => {
-          // Clipboard helper function
-          window.geminiSidebarCopyHelper = function (text) {
-            if (navigator.clipboard && navigator.clipboard.writeText) {
-              return navigator.clipboard.writeText(text);
-            } else {
-              throw new Error("Clipboard API not available");
-            }
-          };
-
-          console.log(
-            "Gemini Sidebar: Clipboard helper injected via background script"
-          );
-        },
-      })
-      .catch((err) => {
-        console.error("Background: Failed to inject clipboard helper:", err);
-      });
-  }
-});
