@@ -5,6 +5,8 @@ iframe.addEventListener("load", () => {
   loading.style.display = "none";
   iframe.style.display = "block";
   console.debug("iframe load handler executed");
+  
+  iframe.focus();
 });
 
 iframe.addEventListener("error", () => {
